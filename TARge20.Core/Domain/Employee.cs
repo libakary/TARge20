@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TARge20.Core.Domain
 {
     public class Employee
     {
+
+        // primary key
         [Key]
         public Guid Id { get; set; }
+        // atribuudid
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
-        /// ESIMENE HINDELINE HARJUTUS
-        /// Nõuded ja tegevus:
-        /// 1. Kui tahate, siis võite forkida minu projekti GitHubist ja läbi Sourcetree enda arvutisse tõmmata.
-        /// 2. See teeb teil teise hindelise ülesande tegemise lihtsamaks kuna siis on ainult vaja commitida ja pushida.
-        /// 3. Teha Code First ja Database First Migration.
-        /// 4. Teha word dokumendile töökäik koos piltidega ja detailne. Mitte, et vajuta seda ja mine sinna ning siis on valmis. 
-        /// St, et kui mina hakkan teie õpetust jäljendama, siis ma saan selle tehtud.
-        /// 5. Kindlasti tahan näha MS SQL DB-st pilti enne migrationit ja peale seda.
-        /// 6. Enne Database first migrationi tegemist tuleb ära kustutada Employee.cs ja TARge20DbContext.cs​ . Seda juhul, kui kasutad minu projektipõhja.
-        /// 7. Code first puhul peab tekkima Serverisse sinu loodud objekt(id), serverisse __EFMigrationsHistory objekt ja  Migrations kaust projekti.
-        /// 8. Database first puhul tekib projekti Models-i alla Serveris loodud objekt(id).
-
+        public Gender Gender { get; set; }
+        public string IdCode { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Comment { get; set; }
 
         /// TEINE HINDELINE HARJUTUS
         ///
@@ -51,25 +50,201 @@ namespace TARge20.Core.Domain
         /// https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?redirectedfrom=MSDN&view=net-5.0
         /// https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers#:~:text=Object%20initializers%20let%20you%20assign,by%20lines%20of%20assignment%20statements.
         /// </summary>
+
+
         /// Kas peaks objekti initsialiseerima või mitte
         //public IEnumerable<Children> Childrens { get; set; } = new List<Children>();
-        //public ICollection<Children> Childrens { get; set; }
+        public ICollection<Children> Childrens { get; set; }
         //public List<Children> Childrens { get; set; }
     }
 
 
-    //public enum Gender
-    //{
-    //    Female, 
-    //    Male,
-    //    Unknown
-    //}
+    public enum Gender
+    {
+        Female,
+        Male,
+        Unknown
+    }
 
-    //public class Children
-    //{
-    //    [Key]
-    //    public Guid Id { get; set; }
+    public class Children
+    {
+        [Key]
+        public Guid Id { get; set; }
 
-    //    public string FirstName { get; set; }
-    //}
+        [ForeignKey("EmployeeFK")]
+        public virtual Employee Employee { get; set; }
+        public Guid EmployeeFK { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public Gender Gender { get; set; }
+        public string IdCode { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class Osakond
+    {
+        public Guid Id { get; set; }
+        public int OsakonnaNumber { get; set; }
+        public string OsakonnaNimetus { get; set; }
+        public string Asukoht { get; set; }
+        public string VastutavIsik { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public int EmployeeNumber { get; set; }
+        public string Comment { get; set; }
+
+        public ICollection<Employee> Employees { get; set; }
+    }
+
+    public class Peakontor
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string ContactPerson { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string Comment { get; set; }
+
+        public ICollection<Osakond> Osakonnad { get; set; }
+
+    }
+
+    public class Ametinimetus
+    {
+        public Guid Id { get; set; }
+        public string Nimetus { get; set; }
+
+        [ForeignKey("OsakondFK")]
+        public virtual Osakond Osakond { get; set; }
+        public Guid OsakondFK { get; set; }
+
+        public string Comment { get; set; }
+
+    }
+
+    public class Ligipaasuluba
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        [ForeignKey("PeakontorFK")]
+        public virtual Peakontor Peakontor { get; set; }
+        public Guid PeakontorFK { get; set; }
+
+        [ForeignKey("OsakondFK")]
+        public virtual Osakond Osakond { get; set; }
+        public Guid OsakondFK { get; set; }
+
+        [ForeignKey("EmployeeFK")]
+        public virtual Employee Employee { get; set; }
+        public Guid EmployeeFK { get; set; }
+
+        public DateTime KehtivAlates { get; set; }
+        public DateTime KehtivKuni { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class Vihjed
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public string Sisu { get; set; }
+
+        [ForeignKey("PeakontorFK")]
+        public virtual Peakontor Peakontor { get; set; }
+        public Guid PeakontorFK { get; set; }
+
+        public DateTime EntryDate { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class Palved
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public string Sisu { get; set; }
+
+        [ForeignKey("EmployeeFK")]
+        public virtual Employee Employee { get; set; }
+        public Guid EmployeeFK { get; set; }
+
+        [ForeignKey("PeakontorFK")]
+        public virtual Peakontor Peakontor { get; set; }
+        public Guid PeakontorFK { get; set; }
+
+        public DateTime EntryDate { get; set; }
+        public DateTime AnswerDate { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class LaenuTooted
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        public int TooteKood { get; set; }
+        public string TooteNimi { get; set; }
+
+        [ForeignKey("EmployeeFK")]
+        public virtual Employee Employee { get; set; }
+        public Guid EmployeeFK { get; set; }
+
+        [ForeignKey("OsakondFK")]
+        public virtual Osakond Osakond { get; set; }
+        public Guid OsakondFK { get; set; }
+
+        public DateTime KasutusKuupaev { get; set; }
+        public DateTime TagastusKuupaev { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class Haigusleht
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        public int HaigusleheNr { get; set; }
+
+        [ForeignKey("EmployeeFK")]
+        public virtual Employee Employee { get; set; }
+        public Guid EmployeeFK { get; set; }
+
+        public DateTime OpenDate { get; set; }
+        public DateTime CloseDate { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class TerviseKontroll
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        public int TerviseKontrolliNr { get; set; }
+
+        [ForeignKey("EmployeeFK")]
+        public virtual Employee Employee { get; set; }
+        public Guid EmployeeFK { get; set; }
+
+        public DateTime NextCheckupDate { get; set; }
+        public string Tulemus { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class Puhkused
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        public int PuhkuseNr { get; set; }
+
+        [ForeignKey("EmployeeFK")]
+        public virtual Employee Employee { get; set; }
+        public Guid EmployeeFK { get; set; }
+
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Comment { get; set; }
+    }
 }
