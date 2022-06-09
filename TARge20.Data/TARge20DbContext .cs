@@ -19,16 +19,16 @@ namespace TARge20.Data
         // migratsioonid peavad tulema siia libary-sse e TARge20.Data alla.
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Children> Children { get; set; }
-        public DbSet<Osakond> Osakond { get; set; }
-        public DbSet<Peakontor> Peakontor { get; set; }
-        public DbSet<Ametinimetus> Ametinimetus { get; set; }
-        public DbSet<Ligipaasuluba> Ligipaasuluba { get; set; }
-        public DbSet<Vihjed> Vihjed { get; set; }
-        public DbSet<Palved> Palved { get; set; }
-        public DbSet<LaenuTooted> LaenuTooted { get; set; }
-        public DbSet<Haigusleht> Haigusleht { get; set; }
-        public DbSet<TerviseKontroll> TerviseKontroll { get; set; }
-        public DbSet<Puhkused> Puhkused { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<MainOffice> MainOffice { get; set; }
+        public DbSet<JobTitle> JobTitle { get; set; }
+        public DbSet<AccessPermission> AccessPermission { get; set; }
+        public DbSet<Hints> Hints { get; set; }
+        public DbSet<Appeals> Appeals { get; set; }
+        public DbSet<BorrowedItems> BorrowedItems { get; set; }
+        public DbSet<SickLeave> SickLeave { get; set; }
+        public DbSet<HealthCheck> HealthCheck { get; set; }
+        public DbSet<Vacations> Vacations { get; set; }
 
     }
 }
